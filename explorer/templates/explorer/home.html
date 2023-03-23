@@ -1,0 +1,77 @@
+{% extends 'explorer/base.html' %}
+
+{% block content %}
+  <h1>Text Explorer</h1>
+
+  <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+  </form>
+  <div class="container-fluid">
+  <div class="row">
+    <div class="col">
+      <h2>Wikipedia Articles</h2>
+      <hr>
+      {% if wikipedia_articles %}
+        <ul class="list-group">
+          {% for wikipedia_article in wikipedia_articles %}
+            <li class="list-group-item bg-dark text-white">
+              <h5>{{ wikipedia_article.title }}</h5>
+              <p>{{ wikipedia_article.content }}</p>
+              <a href="{% url 'add_wikipedia_favorite' wikipedia_article.id %}" class="btn btn-primary">Add to favorites</a>
+              <a href="{% url 'add_wikipedia_highlight' wikipedia_article.id %}" class="btn btn-primary">Highlight</a>
+              <a href="{% url 'add_wikipedia_comment' wikipedia_article.id %}" class="btn btn-primary">Comment</a>
+            </li>
+          {% empty %}
+            <li class="list-group-item">No Wikipedia articles available.</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <ul class="list-group">
+          <li class="list-group-item">No Wikipedia articles available.</li>
+        </ul>
+      {% endif %}
+    </div>
+    <div class="col">
+      <h2>Talmudic Texts</h2>
+      <hr>
+      {% if talmudic_texts %}
+        <ul class="list-group">
+          {% for talmudic_text in talmudic_texts %}
+            <li class="list-group-item bg-dark text-white">
+              <h5>{{ talmudic_text.title }}</h5>
+              <p>{{ talmudic_text.content|safe }}</p>
+            </li>
+          {% empty %}
+            <li class="list-group-item">No Talmudic texts available.</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <ul class="list-group">
+          <li class="list-group-item">No Talmudic texts available.</li>
+        </ul>
+      {% endif %}
+    </div>
+    <div class="col">
+      <h2>Hebrew Talmud</h2>
+      <hr>
+      {% if talmudic_texts %}
+        <ul class="list-group">
+          {% for talmudic_text in talmudic_texts %}
+            <li class="list-group-item bg-dark text-white">
+              <h5>{{ talmudic_text.title }}</h5>
+              <p>{{ talmudic_text.hebrew_content|safe }}</p>
+            </li>
+          {% empty %}
+            <li class="list-group-item">No Talmudic texts available.</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <ul class="list-group">
+          <li class="list-group-item">No Talmudic texts available.</li>
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
