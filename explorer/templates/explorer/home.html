@@ -8,70 +8,73 @@
     <button type="submit">Search</button>
   </form>
   <div class="container-fluid">
-  <div class="row">
-    <div class="col">
-      <h2>Wikipedia Articles</h2>
-      <hr>
-      {% if wikipedia_articles %}
-        <ul class="list-group">
-          {% for wikipedia_article in wikipedia_articles %}
-            <li class="list-group-item bg-dark text-white">
-              <h5>{{ wikipedia_article.title }}</h5>
-              <p>{{ wikipedia_article.content }}</p>
-              <a href="{% url 'add_wikipedia_favorite' wikipedia_article.id %}" class="btn btn-primary">Add to favorites</a>
-              <a href="{% url 'add_wikipedia_highlight' wikipedia_article.id %}" class="btn btn-primary">Highlight</a>
-              <a href="{% url 'add_wikipedia_comment' wikipedia_article.id %}" class="btn btn-primary">Comment</a>
-            </li>
-          {% empty %}
-            <li class="list-group-item">No Wikipedia articles available.</li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <ul class="list-group">
-          <li class="list-group-item">No Wikipedia articles available.</li>
-        </ul>
-      {% endif %}
-    </div>
-    <div class="col">
-      <h2>Talmudic Texts</h2>
-      <hr>
-      {% if talmudic_texts %}
-        <ul class="list-group">
-          {% for talmudic_text in talmudic_texts %}
-            <li class="list-group-item bg-dark text-white">
-              <h5>{{ talmudic_text.title }}</h5>
-              <p>{{ talmudic_text.content|safe }}</p>
-            </li>
-          {% empty %}
-            <li class="list-group-item">No Talmudic texts available.</li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <ul class="list-group">
-          <li class="list-group-item">No Talmudic texts available.</li>
-        </ul>
-      {% endif %}
-    </div>
-    <div class="col">
-      <h2>Hebrew Talmud</h2>
-      <hr>
-      {% if talmudic_texts %}
-        <ul class="list-group">
-          {% for talmudic_text in talmudic_texts %}
-            <li class="list-group-item bg-dark text-white">
-              <h5>{{ talmudic_text.title }}</h5>
-              <p>{{ talmudic_text.hebrew_content|safe }}</p>
-            </li>
-          {% empty %}
-            <li class="list-group-item">No Talmudic texts available.</li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <ul class="list-group">
-          <li class="list-group-item">No Talmudic texts available.</li>
-        </ul>
-      {% endif %}
+    <div class="row">
+      {% for item, item_comments in comments_list %}
+        {% if item in wikipedia_articles %}
+          <div class="col">
+            <h2>Wikipedia Articles</h2>
+            <hr>
+            <ul class="list-group">
+              <li class="list-group-item bg-dark text-white">
+                <h5>{{ item.title }}</h5>
+                <p>{{ item.content }}</p>
+                <a href="{% url 'add_wikipedia_favorite' item.id %}" class="btn btn-primary">Add to favorites</a>
+                <a href="{% url 'add_wikipedia_highlight' item.id %}" class="btn btn-primary">Highlight</a>
+                <a href="{% url 'add_wikipedia_comment' item.id %}" class="btn btn-primary">Comment</a>
+              </li>
+              <div class="col">
+                <h6>Comments:</h6>
+                {% for comment in item_comments %}
+                  <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+                {% empty %}
+                  <p>No comments available.</p>
+                {% endfor %}
+              </div>
+            </ul>
+          </div>
+        {% elif item in talmudic_texts %}
+          <div class="col">
+            <h2>Talmudic Texts</h2>
+            <hr>
+            <ul class="list-group">
+              <li class="list-group-item bg-dark text-white">
+                <h5>{{ item.title }}</h5>
+                <p>{{ item.content|safe }}</p>
+              </li>
+              <div class="col">
+                <h6>Comments:</h6>
+                {% for comment in item_comments %}
+                  <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+                {% empty %}
+                  <p>No comments available.</p>
+                {% endfor %}
+              </div>
+            </ul>
+          </div>
+        {% endif %}
+      {% endfor %}
+      <div class="col">
+        <h2>Hebrew Talmud</h2>
+        <hr>
+        {% for item, item_comments in comments_list %}
+          {% if item in talmudic_texts %}
+            <ul class="list-group">
+              <li class="list-group-item bg-dark text-white">
+                <h5>{{ item.title }}</h5>
+                <p>{{ item.hebrew_content|safe }}</p>
+              </li>
+              <div class="col">
+                <h6>Comments:</h6>
+                {% for comment in item_comments %}
+                  <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+                {% empty %}
+                  <p>No comments available.</p>
+                {% endfor %}
+              </div>
+            </ul>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </div>
-</div>
 {% endblock %}

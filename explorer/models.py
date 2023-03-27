@@ -13,6 +13,15 @@ class WikipediaArticle(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
 
+class WikipediaArticleComment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    wikipedia_article = models.ForeignKey(WikipediaArticle, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username}'s comment on {self.wikipedia_article.title}'"
+
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     talmud_text = models.ForeignKey(TalmudText, on_delete=models.CASCADE, null=True)
